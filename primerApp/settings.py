@@ -41,11 +41,13 @@ INSTALLED_APPS = [
     #Componentes agregados
     'primerComponente',
     'Login',
+    'registro',
 
 
     # Librerias agregadas al proyecto
     'rest_framework',
     'rest_framework.authtoken',
+    
 ]
 
 REST_FRAMEWORK = {
@@ -66,6 +68,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'primerApp.urls'
+
 
 TEMPLATES = [
     {
