@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+ee!$6#_vcp8ys2=g=n6ekb6hku4_*j&n$5d&6(vb8jom5bc)b'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,8 +40,7 @@ INSTALLED_APPS = [
 
     #Componentes agregados
     'primerComponente',
-    'Login',
-    'registro',
+    
 
 
     # Librerias agregadas al proyecto
@@ -92,16 +91,6 @@ WSGI_APPLICATION = 'primerApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Es una constante que nunca cambia , es por defecto nombre ruta librería 
-        'NAME': 'django',
-        'USER': 'postgres',
-        'PASSWORD': 'alejandra',
-        'HOST': 'localhost',
-        'PORT': '5433'
-    }
-}
 
 
 # Password validation
@@ -144,3 +133,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    from primerApp.local_settings import *
+except ImportError:
+    pass     
