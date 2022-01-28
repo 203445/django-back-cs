@@ -50,3 +50,13 @@ class PrimerViewDetail(APIView):
                 return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST) 
         else:
             return Response('ID no encontrado', status = status.HTTP_400_BAD_REQUEST) 
+
+    def delete(self, request, pk, format=None):
+        idResponse = self.get_object(pk = pk)
+       
+        if idResponse != 404:
+            idResponse.delete()
+            return Response({'message': 'usuario eliminado correctamente'})
+        else:
+            return Response('ID no encontrado', status =  status.HTTP_404_NOT_FOUND) 
+      
