@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'password', 'password2', 'email')
 
-    def validate(self,  ):
+    def validate(self, attrs ):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Las contraseñas no coinciden."})
 
@@ -30,7 +30,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             
         )
-        
         user.set_password(validated_data['password'])
         user.save()
 
