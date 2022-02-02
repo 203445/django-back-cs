@@ -84,6 +84,5 @@ class responseView(APIView):
             result = responseOk
         else:
             result = responseBad    
-        result.update({'pay_load': dater})
-        result.update({'status': st})
+        result.update({'pay_load': dater,'status': st})
         return result
