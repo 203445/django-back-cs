@@ -6,9 +6,9 @@ from primerComponente.views import responseView
 #importanciones necesarias
 from posixpath import split
 from django.utils import timezone
-import os 
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+import os 
 
 
 # Importación de modelos
@@ -68,6 +68,14 @@ class PrimerViewDetail(APIView):
         if idResponse != 404:
             serializer = segundaTablaSerializers(idResponse, data = request.data ,context={'request': request})
            
+            #Eliminar imagen antes de modifar
+            fotos = get_object_or_404(imageLoad, pk = pk)
+            partes = (fotos.url_img.url).split("/")
+            ratok = "\\" +str(partes[2])+ "\\"+ str(partes[3])
+            os.remove(os.path.join(settings.MEDIA_ROOT  + ratok))
+            fotos.delete()
+
+            #Modificar los datos
             urlimg = request.data
             #urlimg = urlimg.split(".")
             filename = str(urlimg.__getitem__('url_img')).split(".")
@@ -89,12 +97,8 @@ class PrimerViewDetail(APIView):
         if idResponse !=404:
            
             fotos = get_object_or_404(imageLoad, pk = pk)
-
             partes = (fotos.url_img.url).split("/")
-
             ratok = "\\" +str(partes[2])+ "\\"+ str(partes[3])
-            print(ratok)
-
             os.remove(os.path.join(settings.MEDIA_ROOT  + ratok))
             #serializer = PrimerTablaSerializers(idResponse, data = request.data ,context={'request': request})
             # return Response(responseView.response_custom(serializer.data,status.HTTP_204_NO_CONTENT,'responseok'))
