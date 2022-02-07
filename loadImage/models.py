@@ -11,5 +11,6 @@ class imageLoad(models.Model):
     url_img = models.ImageField(null=False, upload_to='img/')
     format_img = models.CharField(max_length=255, null=False)
     created = models.DateTimeField(default=timezone.now)
-    edite = models.DateTimeField(blank=True, null=True, default=None)  
+    edited = models.DateTimeField(blank=True, null=True, default=None)  
+          
           
