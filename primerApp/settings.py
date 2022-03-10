@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'Login',
     'registro',
     'loadImage',
-    
+    'profileUser',
 
 
     # Librerias agregadas al proyecto

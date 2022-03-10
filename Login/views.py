@@ -1,4 +1,5 @@
 # Recursos de rest-framework
+from distutils.command.build_scripts import first_line_re
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -19,7 +20,11 @@ class LoginAuth(ObtainAuthToken):
         return Response({
             'token':token.key,
             'user_id':user.pk,
-            'email':user.email
+            'email':user.email,
+            'last_name':user.last_name,
+            'first_name':user.first_name,
+            'username':user.username,
+
         }) 
 
 class MyObtainTokenPairView(TokenObtainPairView):

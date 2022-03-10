@@ -27,8 +27,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     re_path(r'^api/', include('Login.urls')),
     re_path(r'^api/v1/primer_componente/', include('primerComponente.urls')),
-    re_path(r'^api/v1/register/', include('registro.urls')), 
-    re_path(r'^api/v1/loadImage/', include('loadImage.urls')), 
+    re_path(r'^api/', include('registro.urls')), 
+    re_path(r'^api/v1/loadImage/', include('loadImage.urls')),
+    re_path(r'^api/v1/', include('profileUser.urls')), 
+
 
 ]
 urlpatterns += [ re_path(r'^assets/(?P<path>.*)$', serve,{ 'document_root' :settings.MEDIA_ROOT,
