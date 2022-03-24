@@ -43,18 +43,18 @@ class PrimerViewDetail(APIView):
             return 404
 
     def get(self, request, pk, format=None):
-        idResponse = self.get_object(pk)
-        if idResponse != 404:
-            serializer = PrimerTablaSerializers(idResponse, context={'request': request})
+        restp = self.get_object(pk)
+        if restp != 404:
+            serializer = PrimerTablaSerializers(restp, context={'request': request})
             return Response(responseView.response_custom(serializer.data,status.HTTP_200_OK,'responseok'))
         else:
-            return Response(responseView.response_custom(serializer.errors,status.HTTP_400_BAD_REQUEST,'responsebad'))  
+            return Response(responseView.response_custom("ID no encontrado",status.HTTP_400_BAD_REQUEST,'responsebad'))  
     
     def put(self, request, pk, format=None):
-        idResponse = self.get_object(pk)
+        restp = self.get_object(pk)
 
-        if idResponse != 404:
-            serializer = PrimerTablaSerializers(idResponse, data = request.data ,context={'request': request})
+        if restp != 404:
+            serializer = PrimerTablaSerializers(restp, data = request.data ,context={'request': request})
             if serializer.is_valid():
                 serializer.save()
                 return Response(responseView.response_custom(serializer.data,status.HTTP_200_OK,'responseok'))
@@ -64,25 +64,19 @@ class PrimerViewDetail(APIView):
             return Response(responseView.response_custom('ID no encontrado',status.HTTP_400_BAD_REQUEST,'responsebad')) 
 
     def delete (self, request, pk, format=None):
-        idResponse = self.get_object(pk)
-        if idResponse !=404:
-            idResponse.delete()
-            #serializer = PrimerTablaSerializers(idResponse, data = request.data ,context={'request': request})
-            # return Response(responseView.response_custom(serializer.data,status.HTTP_204_NO_CONTENT,'responseok'))
-            # if serializer.is_valid():
-            #     serializer.save()
-                # serializer.delete()
+        respo = self.get_object(pk)
+        if respo !=404:
+            respo.delete()
+           
             return Response(responseView.response_custom('Dato eliminado',status.HTTP_200_OK,'responseok'))
-            # else:
-            #     return Response(responseView.response_custom(serializer.errors, status.HTTP_400_BAD_REQUEST,'responsebad'))
         else:
             return Response(responseView.response_custom('ID no encontrado', status.HTTP_400_BAD_REQUEST,'responsebad'))
 
 class responseView(APIView):
-    def  response_custom(dater,st,responseTwo):
-        if responseTwo == "responseok":
+    def  response_custom(self,st,status):
+        if status == "responseok":
             result = responseOk
         else:
             result = responseBad    
-        result.update({'pay_load': dater,'status': st})
+        result.update({'pay_load': self,'status': st})
         return result

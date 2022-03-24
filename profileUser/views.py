@@ -32,16 +32,11 @@ from registro.serializers import UpdateUserSerializer, RegisterSerializerNew
 class PrimerViewList(APIView):
 
     def get(self, request, format=None):
-        querySet = Profileimage.objects.all()
-        serializer = terceraTablaSerializers(querySet,many=True ,context={'request':request})
+        info = Profileimage.objects.all()
+        serializer = terceraTablaSerializers(info,many=True ,context={'request':request})
         return Response(responseView.response_custom(serializer.data,status.HTTP_200_OK,'responseok'))
 
-    # def get(self, request, format=None):
-    #     querySet = User.objects.all()
-    #     serializer = UpdateUserSerializer(querySet,many=True ,context={'request':request})
-    #     return Response(responseView.response_custom(serializer.data,status.HTTP_200_OK,'responseok'))
-
-
+  
     def post(self, request, format=None):
         serializer = terceraTablaSerializers(data = request.data, context={'request':request})
         if serializer.is_valid():
@@ -66,14 +61,14 @@ class PrimerViewDetail(APIView):
 
 
     def get(self, request, pk, format=None):
-        idResponseU = self.get_objectUser(pk)
-        if idResponseU != 404:
-            # serializer = terceraTablaSerializers(idResponse, context={'request': request})
-            serializer2 = UpdateUserSerializer(idResponseU, context={'request': request})
-            idResponse = self.get_object(pk)
+        responsU = self.get_objectUser(pk)
+        if responsU != 404:
 
-            if idResponse != 404:
-                serializer = terceraTablaSerializers(idResponse, context={'request': request})
+            serializer2 = UpdateUserSerializer(responsU, context={'request': request})
+            respt = self.get_object(pk)
+
+            if respt != 404:
+                serializer = terceraTablaSerializers(respt, context={'request': request})
 
                 answ = json.dumps(serializer2.data)
                 answ = json.loads(answ)
@@ -86,24 +81,22 @@ class PrimerViewDetail(APIView):
                 answ.update({"url_img": None})
                 print(answ)
                 return Response(answ)
-            # print(serializer2)
-            # return Response(responseView.response_custom(serializer2.data,status.HTTP_200_OK,'responseok'))
         else:
-            return Response(responseView.response_custom('ID no encontrado',status.HTTP_400_BAD_REQUEST,'responsebad'))
+            return Response(responseView.response_custom("ID no encontrado",status.HTTP_400_BAD_REQUEST,'responsebad'))
 
     def put(self, request, pk, format=None):
-        idResponseUser = self.get_objectUser(pk)
-        idResponse = self.get_object(pk)
-        if idResponseUser != 404 :
+        responsU = self.get_objectUser(pk)
+        respt = self.get_object(pk)
+        if responsU != 404 :
 
-            serializer2 = UpdateUserSerializer(idResponseUser, data = request.data, context={'request': request})
+            serializer2 = UpdateUserSerializer(responsU, data = request.data, context={'request': request})
             if serializer2.is_valid():
                 
                 serializer2.save()
                 
-                if  idResponse != 404:
+                if  respt != 404:
 
-                    serializer = terceraTablaSerializers(idResponse, data = request.data ,context={'request': request})
+                    serializer = terceraTablaSerializers(respt, data = request.data ,context={'request': request})
 
                     if serializer.is_valid():
 
@@ -112,35 +105,26 @@ class PrimerViewDetail(APIView):
                             partes = (fotos.url_img.url).split("/")
                             ratok = "\\" +str(partes[2])+ "\\"+ str(partes[3])
                             os.remove(os.path.join(settings.MEDIA_ROOT  + ratok))
-                            # fotos.delete()
-
                 
                         serializer.save()
                     return Response(responseView.response_custom(serializer.data,status.HTTP_200_OK,'responseok'))
 
-                # or serializer2.is_valid()
                 return Response(responseView.response_custom(serializer2.data,status.HTTP_200_OK,'responseok'))
             else:
-                return Response(responseView.response_custom(serializer.errors,status.HTTP_400_BAD_REQUEST,'responsebad'))
+                return Response(responseView.response_custom("Error",status.HTTP_400_BAD_REQUEST,'responsebad'))
         else:
             return Response(responseView.response_custom('ID no encontrado',status.HTTP_400_BAD_REQUEST,'responsebad'))
 
     def delete (self, request, pk, format=None):
-        idResponse = self.get_object(pk)
-        if idResponse !=404:
+        respons = self.get_object(pk)
+        if respons !=404:
             fotos = get_object_or_404(Profileimage, pk = pk)
             partes = (fotos.url_img.url).split("/")
             ratok = "\\" +str(partes[2])+ "\\"+ str(partes[3])
             os.remove(os.path.join(settings.MEDIA_ROOT  + ratok))
-            #serializer = PrimerTablaSerializers(idResponse, data = request.data ,context={'request': request})
-            # return Response(responseView.response_custom(serializer.data,status.HTTP_204_NO_CONTENT,'responseok'))
-            # if serializer.is_valid():
-            #     serializer.save()
-                # serializer.delete()
+          
             fotos.delete()
-            idResponse.delete()
+            respons.delete()
             return Response(responseView.response_custom('Dato eliminado',status.HTTP_200_OK,'responseok'))
-            # else:
-            #     return Response(responseView.response_custom(serializer.errors, status.HTTP_400_BAD_REQUEST,'responsebad'))
         else:
             return Response(responseView.response_custom('ID no encontrado', status.HTTP_400_BAD_REQUEST,'responsebad'))
